@@ -1,4 +1,5 @@
 var nodemailer = require('nodemailer');
+const client=require("../../Connection/connection");
 
 
 exports.ForgetPassword=function(req,res){
@@ -33,6 +34,19 @@ exports.ForgetPassword=function(req,res){
 })();
 }
 
-
+exports.UpdatePassword=function(req,res){
+  (async()=>{
+    const updatepass=req.body;
+  const updatepassword=await client.query("update customer set password=$1 where customer_id=$2",[updatepass.password,updatepass.customer_id],(error)=>{
+    if(error){
+      res.status(401).json(error);
+    }
+    res.status(200).json({
+      status:"Success",
+      msg:"Password Updated Successfully"
+    })
+  })
+  })();
+}
 
 
