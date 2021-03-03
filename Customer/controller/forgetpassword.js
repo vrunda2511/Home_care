@@ -1,54 +1,132 @@
-var nodemailer = require('nodemailer');
+
 const client=require("../../Connection/connection");
+const sgMail = require('@sendgrid/mail');
 
 
-exports.ForgetPassword=function(req,res){
-(async()=>{
-  let testAccount = await nodemailer.createTestAccount();
+exports.Otpsend=function(req,res){
+  (async()=>{
+   const emailval=req.body;
+    const verifymail=await client.query("select customer_id from customer where email=$1",[emailval.email],(error,response)=>{
+      if(error){
+        res,status(401).json(error);
+      }
+      else
+      {
+        if(response.rowCount==1){
+            var otp = Math.floor(1000 + Math.random() * 9000);
+            console.log(otp);
+            sgMail.setApiKey("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")
+            const msg = {
+              to: emailval.email, // Change to your recipient
+              from: 'wecarehomecare.2511@gmail.com', // Change to your verified sender
+              subject: 'WeCareHomecare Password Reset Code ',
+              text: 'Your Password Reset Otp is',
+              html: '<strong>Your Password Reset Otp is '+otp+'</strong>',
+            }
+            sgMail
+              .send(msg)
+              .then(() => {
+                res.status(200).json({
+                  status:"Success",
+                  msg:"email sent.."
+                })
+                console.log('Email sent')
+              })
+              .catch((error) => {
+                console.error(error)
+              })
+             
+              const otpval=client.query('insert into emailotp(email,otp) values($1,$2)',[emailval.email,otp]); 
+            
+        }
+        else{
+          res.status(200).json({
+            status:"Success",
+            msg:"Email is not valid",
+            val:response.rowCount
+          })
+        }
 
-  // create reusable transporter object using the default SMTP transport
-  let transporter = nodemailer.createTransport({
-    host: "smtp.ethereal.email",
-    port: 587,
-    secure: false, // true for 465, false for other ports
-    auth: {
-      user: "wecarehomecare.2511gmail.com", // generated ethereal user
-      pass: "savaliya123", // generated ethereal password
-    },
-  });
+      }
 
-  // send mail with defined transport object
-  let info = await transporter.sendMail({
-    from: "wecarehomecare.25112gmail.com", // sender address
-    to: "vrunda.2511.vs@gmail.com", // list of receivers
-    subject: "Hello ✔", // Subject line
-    text: "Hello world?", // plain text body
-    html: "<b>Hello world?</b>", // html body
-  });
-
-  console.log("Message sent: %s", info.messageId);
-  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-  // Preview only available when sending through an Ethereal account
-  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-})();
+    })
+  })();
 }
 
-exports.UpdatePassword=function(req,res){
+exports.Verifyotp=function(req,res){
   (async()=>{
-    const updatepass=req.body;
+    const verifyvalues=req.body;
+    console.log(verifyvalues.email);
+    const verifyotp=await client.query("select emailotp.email,customer_id from emailotp ,customer where customer.email=emailotp.email and emailotp.email=$1 and otp=$2 and otp_status=$3",[verifyvalues.email,verifyvalues.otp,0],(error,response)=>{
+      if(error){
+        res.status(401).json(error);
+      }
+      else{
+        if(response.rowCount==1){
+          client.query("update emailotp set otp_status=$1 where email=$2",[1,verifyvalues.email]);
+          res.status(200).json({
+            status:"Success",
+            msg:response.rows
+          })
+        }
+        
+      }
+    })
+  })();
+}
+
+
+//forget password
+exports.ForgetPassword=function(req,res){
+  (async()=>{
+    const forgetpass=req.body;
     // const checkoldpasswpord=await client.query('select customer_id from customer where password=$1',[updatepass.oldpassword],(error,response)=>{
 
     // })
-    const updatepassword=await client.query("update customer set password=$1 where customer_id=$2",[updatepass.password,updatepass.customer_id],(error)=>{
+    const forgetpassword=await client.query("update customer set password=$1 where customer_id=$2",[forgetpass.password,forgetpass.customer_id],(error)=>{
         if(error){
           res.status(401).json(error);
         }
         res.status(200).json({
           status:"Success",
-          msg:"Password Updated Successfully"
+          msg:"Password Reset Successfully"
         })
       })
+  })();
+}
+
+
+
+exports.UpdatePassword=function(req,res){
+  (async()=>{
+    const updatepass=req.body;
+    const checkoldpasswpord=await client.query('select customer_id from customer where password=$1 and customer_id=$2',[updatepass.oldpassword,updatepass.customer_id],(error,response)=>{
+      if(error){
+        res.status(401).json(error);
+      }
+      else{
+        if(response.rowCount==1){
+          (async()=>{
+            const updatepassword=await client.query("update customer set password=$1 where customer_id=$2",[updatepass.newpassword,updatepass.customer_id],(error)=>{
+              if(error){
+                res.status(401).json(error);
+              }
+              res.status(200).json({
+                status:"Success",
+                msg:"Password Updated Successfully"
+              })
+            })
+          })();
+        }
+        else{
+          res.status(200).json({
+            status:"failed",
+            msg:"Your old password is not correct"
+          })
+        }
+      }
+    })
+   
   })();
 }
 
