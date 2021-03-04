@@ -51,6 +51,7 @@ exports.SignIn=function(req,res){
                             // })
 
                             //craete token
+                            console.log("login")
                             const token=jwt.sign({_id:logincreadancial.rows[0]['customer_id']},"vrundasavaliya")
                             //put token in cookie
                             res.cookie('token',token,{expire:new Date()+9999})
