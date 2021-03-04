@@ -9,7 +9,7 @@ exports.Signup=function(req,res){
         const adduser=await client.query('insert into customer(firstname,lastname,gender,mobile_no,email,password,address,image,area) values($1,$2,$3,$4,$5,$6,$7,$8,$9)',[getuserdata.firstname,getuserdata.lastname,getuserdata.gender,getuserdata.mobile_no,getuserdata.email,getuserdata.password,getuserdata.address,getuserdata.image,getuserdata.area],(error)=>{
             if(error)
             {
-                return error;
+                res.status(401).json(error);
             }
             res.status(200).json({
                 status:"Success",
@@ -24,7 +24,7 @@ exports.SignIn=function(req,res){
         const {email,password}=req.body;
         const checkemail=await client.query('select email,customer_id from customer where email=$1',[email],(error,result)=>{
             if(error){
-                return error;
+                res.status(401).json(error);
             }
             if(result.rowCount<=0){
                 res.status(401).json({
@@ -37,7 +37,7 @@ exports.SignIn=function(req,res){
                 (async()=>{
                     const login=await client.query('select email,customer_id,firstname,lastname,role from customer where email=$1 and password=$2',[email,password],(error,logincreadancial)=>{
                         if(error){
-                            return error;
+                            res.status(401).json(error);
                         }
                         if(logincreadancial.rowCount<=0){
                             res.status(401).json({
@@ -56,8 +56,10 @@ exports.SignIn=function(req,res){
                             res.cookie('token',token,{expire:new Date()+9999})
                             //send responce to frontend
                             res.status(200).json({
+                                status:"Success",
                                 msg:logincreadancial.rows,
                                 token:token
+            
                             })
                         }
                       

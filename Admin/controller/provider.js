@@ -7,7 +7,7 @@ exports.AddProvider=function(req,res){
         const addprovider=await client.query('insert into Provider(firstname,lastname,gender,mobile_no,email,address,image,area) values($1,$2,$3,$4,$5,$6,$7,$8)',[getproviderdata.firstname,getproviderdata.lastname,getproviderdata.gender,getproviderdata.mobile_no,getproviderdata.email,getproviderdata.address,getproviderdata.image,getproviderdata.area],(error)=>{
             if(error)
             {
-                return error;
+                res.status(401).json(error);
             }
             res.status(200).json({
                 status:"Success",
@@ -24,7 +24,7 @@ exports.UpdateProvider=function(req,res){
         const updatecustomer=await client.query("update Provider set firstname=$1,lastname=$2,gender=$3,mobile_no=$4,email=$5,address=$6,image=$7,area=$8,modified_date=$9 where provider_id=$10",[getproviderdata.firstname,getproviderdata.lastname,getproviderdata.gender,getproviderdata.mobile_no,getproviderdata.email,getproviderdata.address,getproviderdata.image,getproviderdata.area,dateobj.getDate()+'-'+(dateobj.getMonth()+1)+'-'+dateobj.getFullYear(),provider_id],(error,responce)=>{
             if(error)
             {
-                return error;
+                res.status(401).json(error);
             }
             res.status(200).json({
                 status:"Success",
@@ -40,7 +40,7 @@ exports.Deleteprovider=function(req,res){
       const provider_id=req.params.id;
       const deletesubservice=await client.query('delete from provider where provider_id=$1',[provider_id],(error)=>{
         if(error){
-          return error;
+            res.status(401).json(error);
         }
         res.status(200).json({
           status:"Success",

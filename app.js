@@ -8,8 +8,8 @@ var app=express();
 const CustomerCategoryRoutes=require('./Customer/routes/category');
 const UserRoutes=require('./Customer/routes/user')
 const FeedbackRoutes=require('./Customer/routes/feedback')
-const customeraddtocart=require('./Customer/routes/cart');
-const CustomerPlaceorder=require('./Customer/routes/placeorder')
+const addtocart=require('./Customer/routes/cart');
+const Placeorder=require('./Customer/routes/placeorder')
 
 const ForgetPassword=require('./Customer/routes/forgetpassword');
 
@@ -35,8 +35,8 @@ app.use(
 app.use('/api',CustomerCategoryRoutes)
 app.use('/api',UserRoutes);
 app.use('/api',FeedbackRoutes);
-app.use('/api',customeraddtocart)
-app.use('/api',CustomerPlaceorder)
+app.use('/api',addtocart)
+app.use('/api',Placeorder)
 app.use('/api',ForgetPassword)
 
 

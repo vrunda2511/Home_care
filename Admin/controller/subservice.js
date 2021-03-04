@@ -9,7 +9,7 @@ exports.AddSubService=function(req,res){
           const addsubservice=await client.query("insert into SubServices(service_id,provider_id,sub_servicename,image,price,short_description,long_description,time_duration) values($1,$2,$3,$4,$5,$6,$7,$8)",[id,1,subservicedata.sub_servicename,subservicedata.image,subservicedata.price,subservicedata.short_description,subservicedata.long_description,subservicedata.time_duration],(error)=>{
 
             if(error){
-              return error;
+              res.status(401).json(error);
             }
             res.status(200).json({
               status:"Success",
@@ -29,7 +29,7 @@ exports.UpdateSubService=function(req,res){
       let dateobj=new Date();
       const updateservice=await client.query('update SubServices set sub_servicename=$1,price=$2,short_description=$3,long_description=$4,time_duration=$5,modified_date=$6,image=$7 where subservice_id=$8',[updatesubservicedata.sub_servicename,updatesubservicedata.price,updatesubservicedata.short_description,updatesubservicedata.long_description,updatesubservicedata.time_duration,dateobj.getDate()+'-'+(dateobj.getMonth()+1)+'-'+dateobj.getFullYear(),updatesubservicedata.image,subserviceid],(error)=>{
         if(error){
-          return error;
+          res.status(401).json(error);
         }
         res.status(200).json({
           status:"Success",
@@ -45,7 +45,7 @@ exports.DeleteSubService=function(req,res){
       const subserviceid=req.params.id;
       const deletesubservice=await client.query('delete from SubServices where subservice_id=$1',[subserviceid],(error)=>{
         if(error){
-          return error;
+          res.status(401).json(error);
         }
         res.status(200).json({
           status:"Success",
