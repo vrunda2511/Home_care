@@ -17,6 +17,7 @@ exports.AddToCart=function(req,res){
 
 }
 
+
 exports.RemoveFromCart=function(req,res){
     (async()=>{
         const cart_id=req.params.id;
@@ -28,6 +29,22 @@ exports.RemoveFromCart=function(req,res){
             res.status(200).json({
                 status:'Success',
                 msg:"Service removed from cart"
+            })
+        })
+    })();
+
+}
+exports.ViewFromCart=function(req,res){
+    (async()=>{
+        const customer_id=req.params.id;
+        const viewfromcart=await client.query("select * from cart,subservices where cart.subservice_id=subservices.subservice_id and customer_id=$1",[customer_id],(error,response)=>{
+
+            if(error){
+                res.status(401).json(error);
+            }
+            res.status(200).json({
+                status:'Success',
+                msg:response.rows
             })
         })
     })();

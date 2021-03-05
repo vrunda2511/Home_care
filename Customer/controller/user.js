@@ -6,7 +6,7 @@ var expressJwt=require('express-jwt')
 exports.Signup=function(req,res){
     (async()=>{
         const getuserdata=req.body;
-        const adduser=await client.query('insert into customer(firstname,lastname,gender,mobile_no,email,password,address,image,area) values($1,$2,$3,$4,$5,$6,$7,$8,$9)',[getuserdata.firstname,getuserdata.lastname,getuserdata.gender,getuserdata.mobile_no,getuserdata.email,getuserdata.password,getuserdata.address,getuserdata.image,getuserdata.area],(error)=>{
+        const adduser=await client.query('insert into customer(firstname,lastname,gender,mobile_no,email,password,address,image,area,city) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',[getuserdata.firstname,getuserdata.lastname,getuserdata.gender,getuserdata.mobile_no,getuserdata.email,getuserdata.password,getuserdata.address,getuserdata.image,getuserdata.area,getuserdata.city],(error)=>{
             if(error)
             {
                 res.status(401).json(error);

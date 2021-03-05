@@ -10,4 +10,8 @@ router.post('/AddToCart',isSignedIn,(req,res)=>{
 router.delete('/RemoveFromCart/:id',isSignedIn,(req,res)=>{
     return cart.RemoveFromCart(req,res);
 })
+
+router.get('/ViewFromCart/:id',(req,res)=>{
+    return cart.ViewFromCart(req,res);
+})
 module.exports=router;
