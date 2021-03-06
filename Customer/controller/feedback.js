@@ -20,7 +20,7 @@ exports.AddFeedback=function(req,res){
 exports.ViewFeedback=function(req,res){
     (async()=>{
         const subservice_id=req.params.id;
-        const addfeedback=await client.query('select firstname ,lastname ,review,rating,Feedback.created_date from Feedback left join Customer on Customer.customer_id=Feedback.customer_id where subservice_id=$1',[subservice_id],(error,response)=>{
+        const viewfeedback=await client.query('select firstname ,lastname ,review,rating,Feedback.created_date from Feedback left join Customer on Customer.customer_id=Feedback.customer_id where subservice_id=$1',[subservice_id],(error,response)=>{
             if(error){
                 res.status(401).json(error);
             }
@@ -31,4 +31,37 @@ exports.ViewFeedback=function(req,res){
         })
     })();
 }
+
+exports.AdminViewFeedback=function(req,res){
+    (async()=>{
+        const adminviewfeedback=await client.query('select feedback_id, c.firstname as customername ,c.lastname as customerlastname,p.firstname as providername,p.lastname as providerlastname,review,rating,Feedback.created_date,sub_servicename,service_name from customer c ,services s ,subservices s2,provider p,feedback where feedback.subservice_id =s2.subservice_id and feedback.customer_id =c.customer_id and s2.provider_id=p.provider_id and s.service_id =s2.service_id',(error,response)=>{
+            if(error){
+                res.status(401).json(error);
+            }
+                res.status(200).json(
+               
+                response.rows
+            )
+        })
+    })();
+}
+
+exports.DeleteFeedback=function(req,res){
+    (async()=>{
+        const feedback_id=req.params.id;
+
+        const deletefeedback=await client.query('delete from feedback where feedback_id=$1',[feedback_id],(error)=>{
+            if(error){
+                res.status(401).json(error);
+            }
+                res.status(200).json({
+                status:'Success',
+                msg:"Feedback Deleted"
+            })
+        })
+    })();
+}
+
+
+
 

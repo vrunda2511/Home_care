@@ -53,14 +53,14 @@ exports.Deleteprovider=function(req,res){
 
 exports.ViewProvider=function(req,res){
     (async()=>{
-        const viewProvider=await client.query("Select firstname,lastname,gender,email,mobile_no,address,area from provider",(error,response)=>{
+        const viewProvider=await client.query("Select firstname,lastname,gender,email,mobile_no,address,area,image,provider_id from provider",(error,response)=>{
             if(error){
                 return res.status(401).json(Error);
             }
-            res.status(200).json({
-                status:"success",
-                data:response.rows
-            })
+            res.status(200).json(
+              
+                response.rows
+            )
         })
     })();
 }

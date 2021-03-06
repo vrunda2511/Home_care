@@ -16,7 +16,7 @@ exports.getCategoryByName=function(req,res){
                         // console.log(result.rowCount);
                 // res.json(result.rows[0]['service_id']);
                 const id=parseInt(getserviceid.rows[0]['service_id']);
-                const getSubService=await client.query('select service_name,sub_servicename,firstname as providername,subservices.image,price,time_duration from SubServices,Services,Provider where Provider.provider_id=SubServices.provider_id and SubServices.service_id=Services.service_id and SubServices.service_id=$1',[id]);
+                const getSubService=await client.query('select service_name,sub_servicename,firstname as providername,long_description,short_description,subservices.image,price,time_duration from SubServices,Services,Provider where Provider.provider_id=SubServices.provider_id and SubServices.service_id=Services.service_id and SubServices.service_id=$1',[id]);
                 res.json(getSubService.rows);
         })();    
 }

@@ -4,11 +4,11 @@ const {isSignedIn}=require('../../Customer/controller/user')
 
 var ordermanagement=require('../controller/order')
 
-router.get('/ViewOrderData',isSignedIn,(req,res)=>{
+router.get('/ViewOrderData',(req,res)=>{
     return ordermanagement.ViewOrderData(req,res);
 })
 
-router.put('/UpdateOrderData',isSignedIn,(req,res)=>{
+router.put('/UpdateOrderData',(req,res)=>{
     return ordermanagement.UpdateOrderData(req,res);
 })
 

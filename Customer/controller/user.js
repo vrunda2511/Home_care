@@ -58,7 +58,7 @@ exports.SignIn=function(req,res){
                             //send responce to frontend
                             res.status(200).json({
                                 status:"Success",
-                                msg:logincreadancial.rows,
+                                data:logincreadancial.rows,
                                 token:token
             
                             })
@@ -87,7 +87,7 @@ exports.UpdateCustomer=function(req,res){
         const customer_id=req.params.id;
         let dateobj=new Date();
         console.log(updatedata);
-        const updatecustomer=await client.query("update customer set firstname=$1,lastname=$2,mobile_no=$3,email=$4,password=$5,address=$6,image=$7,area=$8,modified_date=$9 where customer_id=$10",[updatedata.firstname,updatedata.lastname,updatedata.mobile_no,updatedata.email,updatedata.password,updatedata.address,updatedata.image,updatedata.area,dateobj.getDate()+'-'+(dateobj.getMonth()+1)+'-'+dateobj.getFullYear(),customer_id],(error,responce)=>{
+        const updatecustomer=await client.query("update customer set firstname=$1,lastname=$2,mobile_no=$3,email=$4,password=$5,address=$6,image=$7,area=$8,modified_date=$9,city=$10,gender=$11 where customer_id=$12",[updatedata.firstname,updatedata.lastname,updatedata.mobile_no,updatedata.email,updatedata.password,updatedata.address,updatedata.image,updatedata.area,dateobj.getDate()+'-'+(dateobj.getMonth()+1)+'-'+dateobj.getFullYear(),updatedata.city,updatedata.gender,customer_id],(error,responce)=>{
             if(error){
                  res.status(401).json(error);
             }
@@ -101,13 +101,30 @@ exports.UpdateCustomer=function(req,res){
 exports.ViewCustomer=function(req,res){
     (async()=>{
         const customer_id=req.params.id;
-        const viewcustomer=await client.query("select firstname,lastname,gender,mobile_no,email,address,image,area from customer where customer_id=$1",[customer_id],(error,responce)=>{
+        const viewcustomer=await client.query("select customer_id, firstname,lastname,gender,mobile_no,email,address,image,area,city from customer where customer_id=$1",[customer_id],(error,responce)=>{
             if(error){
                  res.status(401).json(error);
             }
-            res.status(200).json({
-                msg:responce.rows
-            })
+            res.status(200).json(
+                responce.rows
+            )
+        })
+    })();
+}
+exports.AdminViewCustomer=function(req,res){
+    (async()=>{
+        const Adminviewcustomer=await client.query("select  customer_id, firstname,lastname,gender,mobile_no,email,address,image,area,city from customer",(error,responce)=>{
+            if(error){
+                 res.status(401).json(error);
+            }
+            res.status(200).json(
+                
+                {
+                    data:responce.rows,
+                    count:responce.rowCount
+                }
+                
+            )
         })
     })();
 }

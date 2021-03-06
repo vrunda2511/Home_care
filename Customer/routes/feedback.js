@@ -11,4 +11,12 @@ router.get('/ViewFeedback/:id',(req,res)=>{
     return FeedbackManagement.ViewFeedback(req,res);
 })
 
+router.get('/AdminViewFeedback',(req,res)=>{
+    return FeedbackManagement.AdminViewFeedback(req,res);
+})
+
+router.delete('/DeleteFeedback/:id',(req,res)=>{
+    return FeedbackManagement.DeleteFeedback(req,res);
+})
+
 module.exports=router;

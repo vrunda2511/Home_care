@@ -26,7 +26,9 @@ router.put('/Updatecustomer/:id',UserManagement.isSignedIn,(req,res)=>{
 router.get('/ViewCustomer/:id',UserManagement.isSignedIn,(req,res)=>{
   return UserManagement.ViewCustomer(req,res);
 })
-
+router.get('/AdminViewCustomer',(req,res)=>{
+  return UserManagement.AdminViewCustomer(req,res);
+})
 
 
 //for testing purpose
