@@ -59,7 +59,10 @@ exports.ViewProvider=function(req,res){
             }
             res.status(200).json(
               
-                response.rows
+                {
+                    data:response.rows,
+                    count:response.rowCount
+                }
             )
         })
     })();

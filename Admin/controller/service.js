@@ -24,7 +24,9 @@ exports.UpdateService=function(req,res){
     (async()=>{
         let servicedata=req.body; 
         let service_id=req.params.id;
-        const result=await client.query('update Services set service_name=$1 ,service_image=$2 where service_id=$3',[servicedata.service_name,servicedata.service_image,service_id],(error)=>{
+        let dateobj=new Date();
+        
+        const result=await client.query('update Services set service_name=$1 ,service_image=$2,modified_date=$3 where service_id=$4',[servicedata.service_name,servicedata.service_image,(dateobj.getMonth()+1)+'-'+dateobj.getDate()+'-'+dateobj.getFullYear(),service_id],(error)=>{
             if(error)
             {
                 res.status(401).json(error)
