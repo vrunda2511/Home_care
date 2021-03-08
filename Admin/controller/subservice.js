@@ -6,7 +6,7 @@ exports.AddSubService=function(req,res){
         const getserviceid=await client.query("select service_id from services where service_name=$1",[subservicedata.service_name]);
         const id=parseInt(getserviceid.rows[0]['service_id']);
         (async()=>{
-          const addsubservice=await client.query("insert into SubServices(service_id,provider_id,sub_servicename,image,price,short_description,long_description,time_duration) values($1,$2,$3,$4,$5,$6,$7,$8)",[id,1,subservicedata.sub_servicename,subservicedata.image,subservicedata.price,subservicedata.short_description,subservicedata.long_description,subservicedata.time_duration],(error)=>{
+          const addsubservice=await client.query("insert into SubServices(service_id,provider_id,sub_servicename,image,price,short_description,long_description,time_duration) values($1,$2,$3,$4,$5,$6,$7,$8)",[id,7,subservicedata.sub_servicename,subservicedata.image,subservicedata.price,subservicedata.short_description,subservicedata.long_description,subservicedata.time_duration],(error)=>{
 
             if(error){
               res.status(401).json(error);
