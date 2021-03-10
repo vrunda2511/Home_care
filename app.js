@@ -29,7 +29,7 @@ app.use(
       extended: true,
     })
   )
-
+app.use('*/images', express.static('uploads/images'))
   //customers
 
 app.use('/api',CustomerCategoryRoutes)

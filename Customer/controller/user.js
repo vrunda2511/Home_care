@@ -81,13 +81,13 @@ exports.Signout=function(req,res){
     });
 };
 
-exports.UpdateCustomer=function(req,res){
+exports.UpdateCustomer=function(req,res,fileurl){
     (async()=>{
         const updatedata=req.body;
         const customer_id=req.params.id;
         let dateobj=new Date();
         console.log(updatedata);
-        const updatecustomer=await client.query("update customer set firstname=$1,lastname=$2,mobile_no=$3,email=$4,password=$5,address=$6,image=$7,area=$8,modified_date=$9,city=$10,gender=$11 where customer_id=$12",[updatedata.firstname,updatedata.lastname,updatedata.mobile_no,updatedata.email,updatedata.password,updatedata.address,updatedata.image,updatedata.area,dateobj.getDate()+'-'+(dateobj.getMonth()+1)+'-'+dateobj.getFullYear(),updatedata.city,updatedata.gender,customer_id],(error,responce)=>{
+        const updatecustomer=await client.query("update customer set firstname=$1,lastname=$2,mobile_no=$3,email=$4,address=$5,image=$6,area=$7,modified_date=$8,city=$9,gender=$10 where customer_id=$11",[updatedata.firstname,updatedata.lastname,updatedata.mobile_no,updatedata.email,updatedata.address,fileurl,updatedata.area,dateobj.getDate()+'-'+(dateobj.getMonth()+1)+'-'+dateobj.getFullYear(),updatedata.city,updatedata.gender,customer_id],(error,responce)=>{
             if(error){
                  res.status(401).json(error);
             }

@@ -3,7 +3,7 @@ const router=express.Router();
 var FeedbackManagement=require('../controller/feedback')
 const {isSignedIn}=require('../../Customer/controller/user')
 
-router.post('/AddFeedback/:id',isSignedIn,(req,res)=>{
+router.post('/AddFeedback/:id',(req,res)=>{
     return FeedbackManagement.AddFeedback(req,res);
 })
 

@@ -42,10 +42,21 @@ exports.ViewFromCart=function(req,res){
             if(error){
                 res.status(401).json(error);
             }
-            res.status(200).json({
-                status:'Success',
-                msg:response.rows
-            })
+            res.status(200).json(response.rows
+            )
+        })
+    })();
+
+}
+exports.ViewOrderCount=function(req,res){
+    (async()=>{
+        const customer_id=req.params.id;
+        const viewordercount=await client.query("select distinct subservices.subservice_id from cart,subservices where cart.subservice_id=subservices.subservice_id and customer_id=$1",[customer_id],(error,response)=>{
+
+            if(error){
+                res.status(401).json(error);
+            }
+            res.status(200).json(response.rows)
         })
     })();
 

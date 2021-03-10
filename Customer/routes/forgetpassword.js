@@ -14,7 +14,7 @@ router.post('/Verifyotp',(req,res)=>{
     return forgetpass.Verifyotp(req,res);
 })
 
-router.post('/ForgetPassword',(req,res)=>{
+router.put('/ForgetPassword',(req,res)=>{
     return forgetpass.ForgetPassword(req,res);
 })
 

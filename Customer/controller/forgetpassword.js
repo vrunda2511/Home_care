@@ -6,7 +6,7 @@ const sgMail = require('@sendgrid/mail');
 exports.Otpsend=function(req,res){
   (async()=>{
    const emailval=req.body;
-    const verifymail=await client.query("select customer_id from customer where email=$1",[emailval.email],(error,response)=>{
+    const verifymail=await client.query("select customer_id from customer where email =$1",[emailval.email],(error,response)=>{
       if(error){
         res,status(401).json(error);
       }
@@ -27,9 +27,8 @@ exports.Otpsend=function(req,res){
               .send(msg)
               .then(() => {
                 res.status(200).json({
-                  status:"Success",
-                  msg:"email sent.."
-                })
+                  status:"Success"
+              })
                 console.log('Email sent')
               })
               .catch((error) => {
@@ -41,7 +40,7 @@ exports.Otpsend=function(req,res){
         }
         else{
           res.status(200).json({
-            status:"Success",
+            status:"Failed",
             msg:"Email is not valid",
             val:response.rowCount
           })
@@ -57,7 +56,7 @@ exports.Verifyotp=function(req,res){
   (async()=>{
     const verifyvalues=req.body;
     console.log(verifyvalues.email);
-    const verifyotp=await client.query("select emailotp.email,customer_id from emailotp ,customer where customer.email=emailotp.email and emailotp.email=$1 and otp=$2 and otp_status=$3",[verifyvalues.email,verifyvalues.otp,0],(error,response)=>{
+    const verifyotp=await client.query("select customer_id from emailotp ,customer where customer.email=emailotp.email and emailotp.email=$1 and otp=$2 and otp_status=$3",[verifyvalues.email,verifyvalues.otp,0],(error,response)=>{
       if(error){
         res.status(401).json(error);
       }
@@ -67,6 +66,13 @@ exports.Verifyotp=function(req,res){
           res.status(200).json({
             status:"Success",
             msg:response.rows
+          })
+        }
+        else{
+          res.status(200).json({
+            status:"Failed",
+            msg:"OTP is not Correct",
+            val:response.rowCount
           })
         }
         

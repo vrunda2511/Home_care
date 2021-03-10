@@ -18,14 +18,14 @@ exports.PlaceOrder=function(req,res){
 exports.ViewOrder=function(req,res){
     (async()=>{
         const customer_id=req.params.id;        
-        const placeorder=await client.query('select sub_servicename,price,time_duration,order_date,order_status from placeorder p left join subservices s on s.subservice_id =p.subservice_id where customer_id=$1',[customer_id],(error,response)=>{
+        const placeorder=await client.query('select placeorder_id,sub_servicename,s.subservice_id,price,time_duration,order_date,order_status from placeorder p left join subservices s on s.subservice_id =p.subservice_id where customer_id=$1',[customer_id],(error,response)=>{
             if(error){
                 return res.status(401).json(error);
             }
-            res.status(200).json({
-                status:"success",
-                data:response.rows
-            })
+            res.status(200).json(response.rows
+            )
         })
     })();
 }
+
+

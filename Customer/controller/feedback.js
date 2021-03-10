@@ -20,14 +20,13 @@ exports.AddFeedback=function(req,res){
 exports.ViewFeedback=function(req,res){
     (async()=>{
         const subservice_id=req.params.id;
-        const viewfeedback=await client.query('select firstname ,lastname ,review,rating,Feedback.created_date from Feedback left join Customer on Customer.customer_id=Feedback.customer_id where subservice_id=$1',[subservice_id],(error,response)=>{
+        const viewfeedback=await client.query('select avg(rating) from Feedback left join Customer on Customer.customer_id=Feedback.customer_id where subservice_id=$1',[subservice_id],(error,response)=>{
             if(error){
                 res.status(401).json(error);
             }
-                res.status(200).json({
-                status:'Success',
-                msg:response.rows
-            })
+                res.status(200).json(
+                response.rows
+            )
         })
     })();
 }
