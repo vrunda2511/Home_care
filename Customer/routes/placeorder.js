@@ -11,6 +11,8 @@ router.post('/PlaceOrder',(req,res)=>{
 router.get('/ViewOrder/:id',(req,res)=>{
     return order.ViewOrder(req,res);
 })
-
+router.get('/ViewOrderAddress/:id',(req,res)=>{
+    return order.ViewOrderAddress(req,res);
+})
 
 module.exports=router;

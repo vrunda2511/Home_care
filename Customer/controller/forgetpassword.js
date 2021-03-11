@@ -15,7 +15,7 @@ exports.Otpsend=function(req,res){
         if(response.rowCount==1){
             var otp = Math.floor(1000 + Math.random() * 9000);
             console.log(otp);
-            sgMail.setApiKey("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")
+            sgMail.setApiKey("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")
             const msg = {
               to: emailval.email, // Change to your recipient
               from: 'wecarehomecare.2511@gmail.com', // Change to your verified sender
