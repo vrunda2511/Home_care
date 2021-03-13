@@ -37,7 +37,7 @@ exports.RemoveFromCart=function(req,res){
 exports.ViewFromCart=function(req,res){
     (async()=>{
         const customer_id=req.params.id;
-        const viewfromcart=await client.query("select * from cart,subservices where cart.subservice_id=subservices.subservice_id and customer_id=$1",[customer_id],(error,response)=>{
+        const viewfromcart=await client.query("select * from cart,subservices where cart.subservice_id=subservices.subservice_id and customer_id=$1 and status=0",[customer_id],(error,response)=>{
 
             if(error){
                 res.status(401).json(error);

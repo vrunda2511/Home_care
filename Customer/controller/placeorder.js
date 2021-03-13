@@ -3,10 +3,12 @@ const client=require("../../Connection/connection");
 exports.PlaceOrder=function(req,res){
     (async()=>{
         const orderdata=req.body;
-        const placeorder=await client.query('insert into Placeorder(customer_id,subservice_id,address,area,amount,city) values($1,$2,$3,$4,$5,$6)',[orderdata.customer_id,orderdata.subservice_id,orderdata.address,orderdata.area,orderdata.amount,orderdata.city],(error)=>{
+        const placeorder=await client.query('insert into Placeorder(customer_id,subservice_id,address,area,amount,city,pincode,order_date,time_slot) values($1,$2,$3,$4,$5,$6,$7,$8,$9)',[orderdata.customer_id,orderdata.subservice_id,orderdata.address,orderdata.area,orderdata.amount,orderdata.city,orderdata.pincode,orderdata.order_date,orderdata.time_slot],(error)=>{
             if(error){
                 return res.status(401).json(error);
             }
+            client.query('update cart set status=1  where customer_id=$1 and subservice_id=$2 ',[orderdata.customer_id,orderdata.subservice_id]);
+      
             res.status(200).json({
                 status:"success",
                 msg:"Order Placed Succesfully you will get conformation soon"
@@ -22,6 +24,7 @@ exports.ViewOrder=function(req,res){
             if(error){
                 return res.status(401).json(error);
             }
+            
             res.status(200).json(response.rows
             )
         })
